@@ -1,6 +1,6 @@
 
 # MOUSE (Mason's Online Universal Simulated Exchange)
-![image](https://github.com/masonhgn/mouse/assets/73012906/9c1af75e-6596-4bd0-aa5b-f83978d8dcf9 = 100x20)
+![image](https://github.com/masonhgn/mouse/assets/73012906/9c1af75e-6596-4bd0-aa5b-f83978d8dcf9 =100x20)
 
 
 This is a simulation of the financial markets where there are fake tickers, fake prices and fake orders. I made this to try and get some experience with:
