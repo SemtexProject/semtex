@@ -1,6 +1,7 @@
 
 # MOUSE (Mason's Online Universal Simulated Exchange)
-![mouse](https://github.com/masonhgn/mouse/assets/73012906/23418cff-6904-4c0d-9202-5a9bebf1ee01)
+![mouse](https://github.com/masonhgn/mouse/assets/73012906/7060bd77-d515-4275-8ee9-47db2c6138af)
+
 
 
 
