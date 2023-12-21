@@ -6,15 +6,14 @@
 #include <chrono>
 #include <iostream>
 
-#include "Order.h"
-#include "LimitOrder.h"
+#include "order/Order.h"
 
 class Orderbook {
 
 public:
 	virtual ~Orderbook() {}
-    void addBuyOrder(const LimitOrder& order);
-    void addSellOrder(const LimitOrder& order);
+    void addBuyOrder(const Order& order);
+    void addSellOrder(const Order& order);
     void printBook();
 
 private:
@@ -22,7 +21,7 @@ private:
     //how should limit orders be sorted in the orderbook? by price and FIFO
     //buy orders are sorted by highest price
     struct BuyOrderComparator {
-        bool operator()(const LimitOrder& a, const LimitOrder& b) {
+        bool operator()(const Order& a, const Order& b) {
             if (a.getPrice() == b.getPrice()) {
                 return a.getTimeStamp() > b.getTimeStamp(); // Earlier timestamp has higher priority
             }
@@ -32,7 +31,7 @@ private:
 
     //sell orders are sorted by lowest price
     struct SellOrderComparator {
-        bool operator()(const LimitOrder& a, const LimitOrder& b) {
+        bool operator()(const Order& a, const Order& b) {
             if (a.getPrice() == b.getPrice()) {
                 return a.getTimeStamp() > b.getTimeStamp(); // Earlier timestamp has higher priority
             }
@@ -40,12 +39,12 @@ private:
         }
     };
 
-    void printBuyOrders(std::priority_queue<LimitOrder, std::vector<LimitOrder>, BuyOrderComparator> pq);
-    void printSellOrders(std::priority_queue<LimitOrder, std::vector<LimitOrder>, SellOrderComparator> pq);
+    void printBuyOrders(std::priority_queue<Order, std::vector<Order>, BuyOrderComparator> pq);
+    void printSellOrders(std::priority_queue<Order, std::vector<Order>, SellOrderComparator> pq);
 
 
-    std::priority_queue<LimitOrder, std::vector<LimitOrder>, BuyOrderComparator> buyOrders;
-    std::priority_queue<LimitOrder, std::vector<LimitOrder>, SellOrderComparator> sellOrders;
+    std::priority_queue<Order, std::vector<Order>, BuyOrderComparator> buyOrders;
+    std::priority_queue<Order, std::vector<Order>, SellOrderComparator> sellOrders;
 	
 
 };

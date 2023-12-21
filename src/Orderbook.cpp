@@ -1,11 +1,11 @@
 #include "Orderbook.h"
 
 
-void Orderbook::addBuyOrder(const LimitOrder& order) {
+void Orderbook::addBuyOrder(const Order& order) {
     buyOrders.push(order);
 }
 
-void Orderbook::addSellOrder(const LimitOrder& order) {
+void Orderbook::addSellOrder(const Order& order) {
     sellOrders.push(order);
 }
 
@@ -17,17 +17,17 @@ void Orderbook::printBook() {
 }
 
 
-void Orderbook::printBuyOrders(std::priority_queue<LimitOrder, std::vector<LimitOrder>, BuyOrderComparator> pq) {
+void Orderbook::printBuyOrders(std::priority_queue<Order, std::vector<Order>, BuyOrderComparator> pq) {
     while (!pq.empty()) {
-        LimitOrder topOrder = pq.top();
+        Order topOrder = pq.top();
         std::cout << topOrder;
         pq.pop();
     }
 }
 
-void Orderbook::printSellOrders(std::priority_queue<LimitOrder, std::vector<LimitOrder>, SellOrderComparator> pq) {
+void Orderbook::printSellOrders(std::priority_queue<Order, std::vector<Order>, SellOrderComparator> pq) {
     while (!pq.empty()) {
-        LimitOrder topOrder = pq.top();
+        Order topOrder = pq.top();
         std::cout << topOrder;
         pq.pop();
     }
