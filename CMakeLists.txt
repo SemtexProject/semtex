@@ -23,32 +23,32 @@ FetchContent_Declare(
         GIT_TAG ${spdlog_GIT_TAG}
 )
 
-# Add hiredis
-set(hiredis_GIT_REPOSITORY "https://github.com/redis/hiredis.git")
-set(hiredis_GIT_TAG "v1.2.0")
-set(HIREDIS_HEADER ${CMAKE_BINARY_DIR}/_deps/hiredis-src)
-set(REDIS_PLUS_PLUS_BUILD_TEST OFF)
-set(REDIS_PLUS_PLUS_BUILD_STATIC OFF)
-set(REDIS_PLUS_PLUS_USE_TLS OFF)
-set(HIREDIS_LIB ${CMAKE_BINARY_DIR}/_deps/hiredis-build/libhiredis.a)
-FetchContent_Declare(
-        hiredis
-        GIT_REPOSITORY ${hiredis_GIT_REPOSITORY}
-        GIT_TAG ${hiredis_GIT_TAG}
-)
+# # Add hiredis
+# set(hiredis_GIT_REPOSITORY "https://github.com/redis/hiredis.git")
+# set(hiredis_GIT_TAG "v1.2.0")
+# set(HIREDIS_HEADER ${CMAKE_BINARY_DIR}/_deps/hiredis-src)
+# set(REDIS_PLUS_PLUS_BUILD_TEST OFF)
+# set(REDIS_PLUS_PLUS_BUILD_STATIC OFF)
+# set(REDIS_PLUS_PLUS_USE_TLS OFF)
+# set(HIREDIS_LIB ${CMAKE_BINARY_DIR}/_deps/hiredis-build/libhiredis.a)
+# FetchContent_Declare(
+#         hiredis
+#         GIT_REPOSITORY ${hiredis_GIT_REPOSITORY}
+#         GIT_TAG ${hiredis_GIT_TAG}
+# )
 
 # Add redis-plus-plus
-set(redis-plus-plus_GIT_REPOSITORY "https://github.com/sewenew/redis-plus-plus.git")
-set(redis-plus-plus_GIT_TAG "1.3.10")
-FetchContent_Declare(
-        redis-plus-plus
-        GIT_REPOSITORY ${redis-plus-plus_GIT_REPOSITORY}
-        GIT_TAG ${redis-plus-plus_GIT_TAG}
-)
+# set(redis-plus-plus_GIT_REPOSITORY "https://github.com/sewenew/redis-plus-plus.git")
+# set(redis-plus-plus_GIT_TAG "1.3.10")
+# FetchContent_Declare(
+#         redis-plus-plus
+#         GIT_REPOSITORY ${redis-plus-plus_GIT_REPOSITORY}
+#         GIT_TAG ${redis-plus-plus_GIT_TAG}
+# )
 
 # Make libraries available to link
-FetchContent_MakeAvailable(hiredis)
-FetchContent_MakeAvailable(spdlog redis-plus-plus)
+#FetchContent_MakeAvailable(hiredis)
+FetchContent_MakeAvailable(spdlog) #redis-plus-plus)
 
 # Find all source files
 file(GLOB_RECURSE SOURCES "src/*.cpp")
