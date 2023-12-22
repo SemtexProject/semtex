@@ -1,11 +1,12 @@
 cmake_minimum_required(VERSION 3.12)
 project(Mouse)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 # Set the output folder where your program will be created
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/bin)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+
 
 # Add external libraries
 
@@ -21,17 +22,17 @@ FetchContent_Declare(
         GIT_TAG ${spdlog_GIT_TAG}
 )
 
-# # Add ImGui
+# Add ImGui
 # set(imgui_GIT_REPOSITORY "https://github.com/ocornut/imgui.git")
-# set(imgui_GIT_TAG "v1.90")
+# set(imgui_VERSION "v1.90")
 # FetchContent_Declare(
-#         imgui
-#         GIT_REPOSITORY ${imgui_GIT_REPOSITORY}
-#         GIT_TAG ${imgui_GIT_TAG}
+#   imgui
+#   URL "https://github.com/ocornut/imgui/archive/${imgui_VERSION}.zip"
 # )
 
+
 # Make libraries available to link
-FetchContent_MakeAvailable(spdlog) #imgui)
+FetchContent_MakeAvailable(spdlog)# imgui)
 
 
 # Find all source files

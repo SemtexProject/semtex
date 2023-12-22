@@ -10,6 +10,10 @@ class OrderQueue {
   using PriorityQueue =
       std::priority_queue<Order, std::vector<Order>, QueueOrderingStrategy>;
 public:
+  OrderQueue(const std::string &symbol) : symbol(symbol) {}
+
+  const std::string &getSymbol() const { return symbol; }
+
   void enqueue(const Order &order) {
     const order_side_t &orderSide = order.getOrderSide();
 
@@ -46,5 +50,6 @@ public:
   }
 
 private:
+  std::string symbol;
   PriorityQueue buyQueue, sellQueue;
 };

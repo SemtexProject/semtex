@@ -28,4 +28,4 @@ namespace core
 #define LOG_INFO(...) ::core::Logger::acquire()->info(__VA_ARGS__)
 #define LOG_WARN(...) ::core::Logger::acquire()->warn(__VA_ARGS__)
 #define LOG_ERROR(...) ::core::Logger::acquire()->error(__VA_ARGS__)
-#define LOG_FATAL(...) ::core::Logger::acquire()->fatal(__VA_ARGS__)
+#define LOG_CRITICAL(...) ::core::Logger::acquire()->critical(__VA_ARGS__)
