@@ -16,7 +16,7 @@ namespace order
             << std::setw(3) << order.quantity
             << " x "
             << std::setw(3) << order.symbol
-            << "at $"
+            << " at $"
             << std::setw(6) << std::setprecision(2) << std::fixed << order.price
             << " ("
             << duration_str
