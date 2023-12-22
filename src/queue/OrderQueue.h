@@ -17,21 +17,21 @@ namespace queue
     {
 
       // if we have buy orders
-      if (lhs.getOrderSide() == side_t::BUY && rhs.getOrderSide() == side_t::BUY)
+      if (lhs.getSide() == side_t::BUY && rhs.getSide() == side_t::BUY)
       {
         if (lhs.getPrice() != rhs.getPrice())
           return lhs.getPrice() > rhs.getPrice(); // the higher the buy order, the better
         return lhs.getTimeStamp() > rhs.getTimeStamp();
       }
       // if we have sell orders
-      else if (lhs.getOrderSide() == side_t::SELL && rhs.getOrderSide() == side_t::SELL)
+      else if (lhs.getSide() == side_t::SELL && rhs.getSide() == side_t::SELL)
       {
         if (lhs.getPrice() != rhs.getPrice())
           return lhs.getPrice() < rhs.getPrice(); // the lower the sell order, the better
         return lhs.getTimeStamp() > rhs.getTimeStamp();
       }
       // order mismatch, throw an error
-      const std::string errMsg = "During comparison, received two orders with different sides: " + std::to_string(lhs.getOrderSide()) + " and " + std::to_string(rhs.getOrderSide());
+      const std::string errMsg = "During comparison, received two orders with different sides: " + std::to_string(lhs.getSide()) + " and " + std::to_string(rhs.getSide());
 
       LOG_ERROR(errMsg);
       throw std::runtime_error(errMsg);
@@ -57,7 +57,7 @@ namespace queue
     // add order to the queue
     void enqueue(const Order &order)
     {
-      const side_t &orderSide = order.getOrderSide();
+      const side_t &orderSide = order.getSide();
 
       if (orderSide == side_t::BUY)
         buyQueue.push(order);

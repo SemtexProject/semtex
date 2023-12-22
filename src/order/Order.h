@@ -37,13 +37,13 @@ public:
 
   //accessors
   float getQuantity() const { return quantity; }
-  side_t getOrderSide() const { return side; }
+  side_t getSide() const { return side; }
   long getId() const { return id;}
   std::string getSymbol() const { return symbol; }
   duration_t getDuration() const { return duration; }
   time_point_t getTimeStamp() const { return timestamp; }
   float getPrice() const { return price; }
-  type_t getOrderType() const { return type; }
+  type_t getType() const { return type; }
 
   friend std::ostream& operator<<(std::ostream& os, const Order& order);
 
