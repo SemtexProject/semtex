@@ -1,38 +1,47 @@
 
 #include <iostream>
-#include "Orderbook.h"
-#include "LimitOrder.h"
-#include <cstdlib>
-#include <ctime>
+#include <iomanip>
 
+#include <spdlog/spdlog.h>
 
-int main() { 
+#include "core/Logger.h"
+#include "order/Order.h"
+#include "queue/OrderQueue.h"
+#include "queue/OrderMasterTable.h"
+#include "test/StockGenerator.h"
 
-	std::cout << "Welcome to the trading desk." << std::endl;
-	srand (time(NULL));
-	Orderbook ob;
-	double increment = 0.05;
-	int count = 0;
-	for (double i = 0; i < 3; i += increment) {
-		if (count % 2 == 0) increment += 0.09;
-		else increment -= 0.03;
-		count += 1;
-		int shares = rand() % 100;
-		ob.addBuyOrder(LimitOrder(6542654, shares, buy, "AAPL", 150 + i, day));
+std::string serializeTimePoint(const time_point_t& time);
+
+int main()
+{
+	// Initialize the logger
+	core::Logger::init();
+
+	// Create a list of 50 orders with random prices, quantities, and IDs with 25 buy orders and 25 sell orders
+	std::vector<Order> orders;
+	for (int i = 0; i < 50; i++)
+	{
+		test::StockGenerator sg("src/test/S&P500_Symbols.txt", 1.0, 100.0, 1, 100);
+		orders.push_back(sg.generateRandomOrder());
 	}
 
-	for (double i = 0; i < 3; i += increment) {
-		if (count % 2 == 0) increment += 0.04;
-		else increment -= 0.01;
-		count += 1;
-		int shares = rand() % 100;
-		ob.addSellOrder(LimitOrder(6542654, shares, sell, "AAPL", 150 + i, day));
-	}
+	queue::OrderMasterTable &mt = queue::OrderMasterTable::getInstance();
 
-
-	ob.printBook();
-	
+	// Enqueue all the orders
+	for (auto &o : orders)
+		mt.enqueue(o);
 
 
 	return 0;
+}
+
+std::string serializeTimePoint(const time_point_t& time)
+{
+	std::string format("%m/%d/%Y %H:%M:%S");
+    std::time_t tt = std::chrono::system_clock::to_time_t(time);
+    // std::tm tm = *std::gmtime(&tt); //GMT (UTC)
+    std::tm tm = *std::localtime(&tt); //Locale time-zone, usually UTC by default.
+    std::stringstream ss;
+    ss << std::put_time( &tm, format.c_str() );
+    return ss.str();
 }
