@@ -2,13 +2,15 @@
 
 #include <queue>
 #include <string>
-#include <queue>
 
 #include "queue/OrderQueue.h"
 #include "order/Types.h"
+#include "core/Logger.h"
 
 namespace queue
 {
+
+  using namespace order;
 
   class OrderMasterTable
   {

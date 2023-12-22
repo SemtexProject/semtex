@@ -2,25 +2,41 @@
 
 #include <chrono>
 #include <string>
+#include <iostream>
+#include <iomanip>
 
 #include "Types.h"
 
-using namespace order;
-
-namespace order
+namespace order 
 {
 
-class Order
-{
+class Order {
 public:
-  Order(long orderId, quantity_t orderQuantity, price_t orderPrice,
-        side_t orderSide, type_t orderType, std::string orderSymbol,
-        duration_t orderDuration)
-      : id(orderId), quantity(orderQuantity), side(orderSide), type(orderType),
-        price(orderPrice), symbol(orderSymbol), duration(orderDuration),
-        timestamp(std::chrono::system_clock::now()) {}
+
+  //default constructor
+  Order(
+    long orderId, //individual id for each order
+    quantity_t orderQuantity, //number of shares
+    price_t orderPrice,
+    side_t orderSide, //BUY, SELL
+    type_t orderType, //LIMIT, STOP, MARKET
+    std::string orderSymbol, //ticker
+    duration_t orderDuration //DAY, GOOD_TILL_CANCELLED
+  ) : 
+    id(orderId), 
+    quantity(orderQuantity), 
+    side(orderSide), 
+    type(orderType),
+    price(orderPrice), 
+    symbol(orderSymbol), 
+    duration(orderDuration),
+    timestamp(std::chrono::system_clock::now()) 
+  {}
+
   
-  quantity_t getQuantity() const { return quantity; }
+
+  //accessors
+  float getQuantity() const { return quantity; }
   side_t getOrderSide() const { return side; }
   long getId() const { return id;}
   std::string getSymbol() const { return symbol; }
@@ -29,12 +45,12 @@ public:
   float getPrice() const { return price; }
   type_t getOrderType() const { return type; }
 
-  void setQuantity(quantity_t newQuantity) { quantity = newQuantity; }
+  friend std::ostream& operator<<(std::ostream& os, const Order& order);
 
 private:
   long id;
-  price_t price;
-  quantity_t quantity;
+  float price;
+  unsigned int quantity;
   time_point_t timestamp;
   side_t side;
   type_t type;

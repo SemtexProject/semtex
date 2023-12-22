@@ -9,15 +9,20 @@
 #include "order/Order.h"
 #include "core/Logger.h"
 
-
 namespace test
 {
+
     using namespace order;
 
-    class StockGenerator
-    {
+    class StockGenerator {
     public:
-        StockGenerator(std::vector<std::string> symbols, price_t minPrice, price_t maxPrice, quantity_t minQuantity, quantity_t maxQuantity);
+        StockGenerator(
+            std::string symbolsFile, 
+            price_t minPrice, 
+            price_t maxPrice, 
+            quantity_t minQuantity, 
+            quantity_t maxQuantity
+        );
 
         Order generateRandomOrder();
 
