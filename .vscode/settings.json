@@ -82,7 +82,10 @@
         "span": "cpp",
         "stop_token": "cpp",
         "thread": "cpp",
-        "version": "cpp"
+        "version": "cpp",
+        "__std_stream": "cpp",
+        "regex": "cpp",
+        "stack": "cpp"
     },
-    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
+    "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools"
 }

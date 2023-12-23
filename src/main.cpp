@@ -7,7 +7,7 @@
 #include "core/Logger.h"
 #include "order/Order.h"
 #include "queue/OrderQueue.h"
-#include "queue/OrderMasterTable.h"
+#include "MasterTable.h"
 #include "test/StockGenerator.h"
 
 std::string serializeTimePoint(const time_point_t& time);
@@ -25,16 +25,21 @@ int main()
 		orders.push_back(sg.generateRandomOrder());
 	}
 
-	queue::OrderMasterTable &mt = queue::OrderMasterTable::getInstance();
+	MasterTable &mt = MasterTable::getInstance();
 
 	// Enqueue all the orders
-	for (auto &o : orders)
-		mt.enqueue(o);
+	for (auto &o : orders) {
+		std::cout << o;
+		mt.addOrder(o);
+	}
+
+
 
 
 	return 0;
 }
 
+/*
 std::string serializeTimePoint(const time_point_t& time)
 {
 	std::string format("%m/%d/%Y %H:%M:%S");
@@ -42,6 +47,7 @@ std::string serializeTimePoint(const time_point_t& time)
     // std::tm tm = *std::gmtime(&tt); //GMT (UTC)
     std::tm tm = *std::localtime(&tt); //Locale time-zone, usually UTC by default.
     std::stringstream ss;
-    ss << std::put_time( &tm, format.c_str() );
+    ss << std::put_time( &tm, format.c_str());
     return ss.str();
 }
+*/

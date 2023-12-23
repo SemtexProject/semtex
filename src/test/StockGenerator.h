@@ -12,10 +12,15 @@
 namespace test
 {
 
-    class StockGenerator
-    {
+    class StockGenerator {
     public:
-        StockGenerator(std::string symbolsFile, price_t minPrice, price_t maxPrice, quantity_t minQuantity, quantity_t maxQuantity);
+        StockGenerator(
+            std::string symbolsFile, 
+            price_t minPrice, 
+            price_t maxPrice, 
+            quantity_t minQuantity, 
+            quantity_t maxQuantity
+        );
 
         Order generateRandomOrder();
 

@@ -4,8 +4,17 @@
 namespace test
 {
 
-    StockGenerator::StockGenerator(std::string symbolsFile, price_t minPrice, price_t maxPrice, quantity_t minQuantity, quantity_t maxQuantity)
-        : minPrice(minPrice), maxPrice(maxPrice), minQuantity(minQuantity), maxQuantity(maxQuantity)
+    StockGenerator::StockGenerator(
+        std::string symbolsFile, 
+        price_t minPrice, 
+        price_t maxPrice, 
+        quantity_t minQuantity, 
+        quantity_t maxQuantity
+    ) : 
+        minPrice(minPrice), 
+        maxPrice(maxPrice), 
+        minQuantity(minQuantity), 
+        maxQuantity(maxQuantity)
     {
 
         // Read in the symbols file
@@ -26,7 +35,14 @@ namespace test
         auto id = static_cast<int>(util::random(0, 999999999));
         auto symbol = symbols.at(util::random(0, static_cast<int>(symbols.size()) - 1));
 
-        return Order{id, generateRandomQuantity(), generateRandomPrice(), generateRandomSide(), order_type_t::LIMIT, symbol, duration_t::DAY};
+        return Order{
+            id, 
+            generateRandomQuantity(), 
+            generateRandomPrice(), 
+            generateRandomSide(), 
+            order_type_t::LIMIT, 
+            symbol, duration_t::DAY
+        };
     }
 
     order_side_t StockGenerator::generateRandomSide()
