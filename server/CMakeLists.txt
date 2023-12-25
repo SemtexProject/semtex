@@ -3,6 +3,9 @@ project(Mouse)
 
 set(CMAKE_CXX_STANDARD 20)
 
+# Program options
+option(EXECUTABLE_NAME "Name of the executable" "Mouse")
+
 # Set the output folder where your program will be created
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/bin)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
@@ -60,4 +63,7 @@ add_executable(Mouse ${SOURCES})
 target_include_directories(Mouse PUBLIC src)
 
 # Link libraries
-target_link_libraries(Mouse PUBLIC spdlog::spdlog redis++::redis++)
+target_link_libraries(Mouse PUBLIC spdlog::spdlog)# redis++::redis++)
+
+# Set executable name
+set_target_properties(Mouse PROPERTIES OUTPUT_NAME ${EXECUTABLE_NAME})

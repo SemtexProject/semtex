@@ -7,7 +7,7 @@
 #include "core/Logger.h"
 #include "order/Order.h"
 #include "queue/OrderQueue.h"
-#include "MasterTable.h"
+#include "Exchange.h"
 #include "test/StockGenerator.h"
 
 std::string serializeTimePoint(const order::time_point_t& time);
@@ -25,14 +25,27 @@ int main()
 		orders.push_back(sg.generateRandomOrder());
 	}
 
-	MasterTable &mt = MasterTable::getInstance();
+	Exchange &ex = Exchange::getInstance();
 
 	// Enqueue all the orders
 	for (auto &o : orders) {
-		std::cout << o;
-		mt.addOrder(o);
+		ex.submit(o);
 	}
 
+	// Print out the orders in the queue sorted by buy and then price
+	std::sort(orders.begin(), orders.end(), [](const order::Order &a, const order::Order &b) {
+		if (a.getSide() == order::side_t::BUY && b.getSide() == order::side_t::SELL)
+			return true;
+		else if (a.getSide() == order::side_t::SELL && b.getSide() == order::side_t::BUY)
+			return false;
+		else
+			return a.getPrice() > b.getPrice();
+	});
+
+
+	for (auto &o : orders) {
+		std::cout << o << std::endl;
+	}
 
 
 
@@ -40,14 +53,5 @@ int main()
 }
 
 /*
-std::string serializeTimePoint(const time_point_t& time)
-{
-	std::string format("%m/%d/%Y %H:%M:%S");
-    std::time_t tt = std::chrono::system_clock::to_time_t(time);
-    // std::tm tm = *std::gmtime(&tt); //GMT (UTC)
-    std::tm tm = *std::localtime(&tt); //Locale time-zone, usually UTC by default.
-    std::stringstream ss;
-    ss << std::put_time( &tm, format.c_str());
-    return ss.str();
-}
+
 */

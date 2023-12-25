@@ -20,14 +20,14 @@ namespace queue
       if (lhs.getSide() == side_t::BUY && rhs.getSide() == side_t::BUY)
       {
         if (lhs.getPrice() != rhs.getPrice())
-          return lhs.getPrice() > rhs.getPrice(); // the higher the buy order, the better
-        return lhs.getTimeStamp() > rhs.getTimeStamp();
+          return lhs.getPrice() < rhs.getPrice(); // the higher the buy order, the better
+        return lhs.getTimeStamp() < rhs.getTimeStamp();
       }
       // if we have sell orders
       else if (lhs.getSide() == side_t::SELL && rhs.getSide() == side_t::SELL)
       {
         if (lhs.getPrice() != rhs.getPrice())
-          return lhs.getPrice() < rhs.getPrice(); // the lower the sell order, the better
+          return lhs.getPrice() > rhs.getPrice(); // the lower the sell order, the better
         return lhs.getTimeStamp() > rhs.getTimeStamp();
       }
       // order mismatch, throw an error

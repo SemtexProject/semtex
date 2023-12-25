@@ -32,8 +32,8 @@ namespace test
 
     Order StockGenerator::generateRandomOrder()
     {
-        auto id = static_cast<int>(util::random(0, 999999999));
-        auto symbol = symbols.at(util::random(0, static_cast<int>(symbols.size()) - 1));
+        auto id = static_cast<order::id_t>(util::random(0, 999999999));
+        auto symbol = symbols.at(util::random(0, 1));//static_cast<int>(symbols.size()) - 1));
 
         return Order{
             id, 

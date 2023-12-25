@@ -1,0 +1,14 @@
+# Set up server and mysql connection as docker-compose.yml
+
+services:
+  server:
+    build: ./server
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+    ports:
+      - "3306:3306"

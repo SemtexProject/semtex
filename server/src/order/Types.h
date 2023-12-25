@@ -10,6 +10,7 @@ namespace order
     using symbol_t = std::string;
     using quantity_t = unsigned int;
     using price_t = float;
+    using id_t = unsigned long;
 
     enum side_t
     {

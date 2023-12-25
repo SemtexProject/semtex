@@ -13,3 +13,4 @@ CPack*
 
 # Logging
 *.log
+logs

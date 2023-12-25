@@ -5,17 +5,18 @@
 #include <iostream>
 #include <iomanip>
 
+#include "util/Stringify.h"
 #include "Types.h"
 
 namespace order 
 {
 
-class Order {
+class Order : public util::Stringify<Order> {
 public:
 
   //default constructor
   Order(
-    long orderId, //individual id for each order
+    id_t orderId, //individual id for each order
     quantity_t orderQuantity, //number of shares
     price_t orderPrice,
     side_t orderSide, //BUY, SELL
@@ -33,6 +34,8 @@ public:
     timestamp(std::chrono::system_clock::now()) 
   {}
 
+  // Overload for Stringify interface
+  std::string toString() const;
   
 
   //accessors
@@ -45,7 +48,6 @@ public:
   float getPrice() const { return price; }
   type_t getType() const { return type; }
 
-  friend std::ostream& operator<<(std::ostream& os, const Order& order);
 
 private:
   long id;
