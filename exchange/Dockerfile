@@ -27,6 +27,14 @@ RUN cd grpc && \
     make -j 4 && \
     make install
 
+
+# Clone and install Abseil
+# RUN git clone https://github.com/abseil/abseil-cpp.git
+# RUN cd abseil-cpp && \
+#     cmake -DCMAKE_POSITION_INDEPENDENT_CODE=TRUE -DCMAKE_INSTALL_PREFIX=/usr/local . && \
+#     make -j $(nproc) && \
+#     make install
+
 # Copy the current project directory into the container at /app
 COPY . /app
 
@@ -34,10 +42,7 @@ COPY . /app
 WORKDIR /app
 
 # Build the project
-RUN mkdir -p /app/build && \
-    cd /app/build && \
-    cmake .. && \
-    make
+RUN cmake -DEXECUTABLE_NAME=Mouse . && make
 
 # Run the client/server
-CMD ["/app/build/YourExecutableName"]
+CMD ["/app/exchange-server"]
