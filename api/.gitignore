@@ -3,3 +3,7 @@ venv/
 
 # Python bytecode (compiled)
 *.pyc
+__pycache__/
+
+# Alembic
+alembic/versions/*.py

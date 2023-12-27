@@ -11,11 +11,9 @@ services:
       - "8000:8000"
     depends_on: 
       - mysql
-    links:
-      - mysql
     volumes:
-      - ./api:/usr/src/app
-      - ./api/alembic/versions:/usr/src/app/alembic/versions
+      - ./api:/usr/src/web
+      - ./api/alembic/versions:/usr/src/web/api/alembic/versions
   redis:
     image: redis:latest
     restart: always
