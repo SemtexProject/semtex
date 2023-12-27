@@ -1,0 +1,6 @@
+/Users/duck/Documents/projects/mouse/CMakeFiles/Mouse.dir
+/Users/duck/Documents/projects/mouse/CMakeFiles/edit_cache.dir
+/Users/duck/Documents/projects/mouse/CMakeFiles/rebuild_cache.dir
+/Users/duck/Documents/projects/mouse/bin/_deps/spdlog-build/CMakeFiles/spdlog.dir
+/Users/duck/Documents/projects/mouse/bin/_deps/spdlog-build/CMakeFiles/edit_cache.dir
+/Users/duck/Documents/projects/mouse/bin/_deps/spdlog-build/CMakeFiles/rebuild_cache.dir

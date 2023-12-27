@@ -9,11 +9,37 @@ option(EXECUTABLE_NAME "Name of the executable" "Mouse")
 # Set the output folder where your program will be created
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/bin)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
-
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
+# Find Protobuf and gRPC
+find_package(Protobuf REQUIRED)
+find_package(gRPC REQUIRED)
 
-# Add external libraries
+# Generate gRPC and Protobuf sources
+set(PROTO_SRC_DIR ${CMAKE_CURRENT_BINARY_DIR}/proto_src)
+file(MAKE_DIRECTORY ${PROTO_SRC_DIR})
+include_directories(${PROTO_SRC_DIR})
+
+set(PROTO_FILE ${CMAKE_SOURCE_DIR}/protos/order.proto)
+set(GENERATED_SOURCES
+  ${PROTO_SRC_DIR}/order.pb.cc
+  ${PROTO_SRC_DIR}/order.pb.h
+  ${PROTO_SRC_DIR}/order.grpc.pb.cc
+  ${PROTO_SRC_DIR}/order.grpc.pb.h
+)
+
+add_custom_command(
+  OUTPUT ${GENERATED_SOURCES}
+  COMMAND ${Protobuf_PROTOC_EXECUTABLE}
+  ARGS --grpc_out=${PROTO_SRC_DIR}
+       --cpp_out=${PROTO_SRC_DIR}
+       -I ${CMAKE_SOURCE_DIR}/protos
+       --plugin=protoc-gen-grpc=${gRPC_CPP_PLUGIN_EXECUTABLE}
+       ${PROTO_FILE}
+  DEPENDS ${PROTO_FILE}
+)
+
+# Add external libraries using FetchContent
 include(FetchContent)
 set(FETCHCONTENT_QUIET OFF)
 
@@ -21,49 +47,31 @@ set(FETCHCONTENT_QUIET OFF)
 set(spdlog_GIT_REPOSITORY "https://github.com/gabime/spdlog.git")
 set(spdlog_GIT_TAG "v1.12.0")
 FetchContent_Declare(
-        spdlog
-        GIT_REPOSITORY ${spdlog_GIT_REPOSITORY}
-        GIT_TAG ${spdlog_GIT_TAG}
+  spdlog
+  GIT_REPOSITORY ${spdlog_GIT_REPOSITORY}
+  GIT_TAG ${spdlog_GIT_TAG}
 )
+FetchContent_MakeAvailable(spdlog)
 
-# # Add hiredis
-# set(hiredis_GIT_REPOSITORY "https://github.com/redis/hiredis.git")
-# set(hiredis_GIT_TAG "v1.2.0")
-# set(HIREDIS_HEADER ${CMAKE_BINARY_DIR}/_deps/hiredis-src)
-# set(REDIS_PLUS_PLUS_BUILD_TEST OFF)
-# set(REDIS_PLUS_PLUS_BUILD_STATIC OFF)
-# set(REDIS_PLUS_PLUS_USE_TLS OFF)
-# set(HIREDIS_LIB ${CMAKE_BINARY_DIR}/_deps/hiredis-build/libhiredis.a)
-# FetchContent_Declare(
-#         hiredis
-#         GIT_REPOSITORY ${hiredis_GIT_REPOSITORY}
-#         GIT_TAG ${hiredis_GIT_TAG}
-# )
-
-# Add redis-plus-plus
-# set(redis-plus-plus_GIT_REPOSITORY "https://github.com/sewenew/redis-plus-plus.git")
-# set(redis-plus-plus_GIT_TAG "1.3.10")
-# FetchContent_Declare(
-#         redis-plus-plus
-#         GIT_REPOSITORY ${redis-plus-plus_GIT_REPOSITORY}
-#         GIT_TAG ${redis-plus-plus_GIT_TAG}
-# )
-
-# Make libraries available to link
-#FetchContent_MakeAvailable(hiredis)
-FetchContent_MakeAvailable(spdlog) #redis-plus-plus)
-
-# Find all source files
-file(GLOB_RECURSE SOURCES "src/*.cpp")
+# Find all source files including the generated gRPC and Protobuf files
+file(GLOB_RECURSE SOURCES "src/*.cpp" ${GENERATED_SOURCES})
 
 # Add the executable
 add_executable(Mouse ${SOURCES})
 
 # Add header files
-target_include_directories(Mouse PUBLIC src)
+target_include_directories(Mouse PUBLIC src ${PROTO_SRC_DIR})
 
-# Link libraries
-target_link_libraries(Mouse PUBLIC spdlog::spdlog)# redis++::redis++)
+# Link libraries including gRPC, Protobuf, and SPDLog
+target_link_libraries(Mouse PUBLIC
+  spdlog::spdlog
+  gRPC::grpc++
+  gRPC::grpc++_reflection
+  protobuf::libprotobuf
+  absl::base
+  absl::strings
+  absl::synchronization
+)
 
 # Set executable name
 set_target_properties(Mouse PROPERTIES OUTPUT_NAME ${EXECUTABLE_NAME})

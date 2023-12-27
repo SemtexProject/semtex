@@ -1,19 +1,43 @@
-# Dockerfile to build the image for the exchange
+# Use an official C++ runtime as a base image
+FROM gcc:latest
 
-FROM ubuntu:latest
+# Install necessary packages for building gRPC
+RUN apt-get update && apt-get upgrade -y && apt-get install -y \
+    cmake \
+    build-essential \
+    autoconf \
+    libtool \
+    pkg-config \
+    libgflags-dev \
+    libgtest-dev \
+    clang \
+    libc++-dev
 
-RUN apt-get update && apt-get upgrade
+# Clone the grpc repo and its submodules
+RUN git clone --recurse-submodules -b v1.60.0 --depth 1 --shallow-submodules https://github.com/grpc/grpc
 
-# Install the required packages
-RUN apt-get install -y cmake make g++ git
+# Build and install gRPC and Protocol Buffers
+RUN cd grpc && \
+    mkdir -p cmake/build && \
+    cd cmake/build && \
+    cmake -DgRPC_INSTALL=ON \
+          -DgRPC_BUILD_TESTS=OFF \
+          -DCMAKE_INSTALL_PREFIX=/usr/local \
+          ../.. && \
+    make -j 4 && \
+    make install
 
-# Copy the source code
-COPY . /usr/src/exchange
+# Copy the current project directory into the container at /app
+COPY . /app
 
-# Build the exchange
-WORKDIR /usr/src/exchange
+# Set the working directory to /app
+WORKDIR /app
 
-RUN cmake -DEXECUTABLE_NAME=exchange . && make
+# Build the project
+RUN mkdir -p /app/build && \
+    cd /app/build && \
+    cmake .. && \
+    make
 
-# Run the exchange
-CMD ["./bin/exchange"]
+# Run the client/server
+CMD ["/app/build/YourExecutableName"]

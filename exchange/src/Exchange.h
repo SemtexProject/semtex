@@ -33,22 +33,28 @@ public:
     return instance;
   }
 
+  //submit an order to the exchange, make transaction if necessary
   void submit(const order::Order &order) {
+
+    //add the order to the order queue
     std::string symbol = order.getSymbol();
     OrderQueueMap::const_iterator itr = queueMap.find(symbol);
-    
     if (itr == queueMap.end()) queueMap[symbol] = queue::OrderQueue(symbol);
     queueMap[symbol].enqueue(order);
 
+
+    //try to execute an order
     auto& queue = queueMap[symbol];
     auto& buyQueue = queue.getQueue(side_t::BUY);
     auto& sellQueue = queue.getQueue(side_t::SELL);
 
-    // Check if new order satisfies and other open orders in the queue
+    
     if (buyQueue.empty() || sellQueue.empty()) return;
 
+    //get top two orders
     const auto& buy = buyQueue.top(), sell = sellQueue.top();
 
+    //if the highest buy price is >= the lowest sell price
     if (buy.getPrice() >= sell.getPrice()) {
       order::quantity_t fillQuantity = std::min(buy.getQuantity(), sell.getQuantity());
       order::price_t medianPrice = (buy.getPrice() + sell.getPrice()) / 2.0;
@@ -63,11 +69,12 @@ public:
 
       auto& executor = transaction::TransactionManager::getInstance();
       executor.execute(t);
-
+      
       // Remove old orders from queue and add new orders
       buyQueue.pop();
       sellQueue.pop();
 
+      //if the buy order is larger than the sell order, the buy order is only partially filled
       if (buy.getQuantity() > sell.getQuantity()) {
         buyQueue.push(order::Order(
           buy.getId(),
@@ -78,6 +85,7 @@ public:
           buy.getSymbol(),
           buy.getDuration()
         ));
+      //conversely, the sell order is only partially filled
       } else if (buy.getQuantity() < sell.getQuantity()) {
         sellQueue.push(order::Order(
           sell.getId(),
@@ -95,10 +103,11 @@ public:
   }
   
 private:
+  //singleton class member data 
   Exchange() {}
   Exchange(Exchange const &) = delete;
   void operator=(Exchange const &) = delete;
 
-  //k=symbol, v=OrderQueue
+  //k = symbol, v = OrderQueue
   OrderQueueMap queueMap;
 };
