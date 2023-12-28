@@ -1,4 +1,3 @@
-[submodule "connector"]
-    path = connector
-    url = https://github.com/SemtexProject/semtex-connector.git
-    branch = main
+[submodule "semtex-grpc"]
+	path = grpc
+	url = https://github.com/SemtexProject/semtex-grpc.git
