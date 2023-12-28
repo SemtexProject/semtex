@@ -27,6 +27,7 @@ RUN cd grpc && \
     make -j 4 && \
     make install
 
+RUN find / -name protoc 2>&1
 
 # Clone and install Abseil
 # RUN git clone https://github.com/abseil/abseil-cpp.git
@@ -42,7 +43,8 @@ COPY . /app
 WORKDIR /app
 
 # Build the project
-RUN cmake -DEXECUTABLE_NAME=Mouse . && make
+RUN cmake -DEXECUTABLE_NAME=MouseServer . --log-level=DEBUG && make
+
 
 # Run the client/server
-CMD ["/app/exchange-server"]
+CMD ["/app/MouseServer"]

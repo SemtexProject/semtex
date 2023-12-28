@@ -19,7 +19,7 @@ class ExchangeServiceImpl final : public exchange::ExchangeService::Service {
         // Obtain an instance of your Exchange and submit the order
         Exchange &ex = Exchange::getInstance();
         ex.submit(internalOrder);
-
+        
         // Set response status
         response->set_status("Order submitted successfully");
         return grpc::Status::OK;

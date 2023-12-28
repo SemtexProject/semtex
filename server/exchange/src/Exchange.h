@@ -35,7 +35,7 @@ public:
 
   //submit an order to the exchange, make transaction if necessary
   void submit(const order::Order &order) {
-
+    std::cout << "order submitted: " << order << std::endl;
     //add the order to the order queue
     std::string symbol = order.getSymbol();
     OrderQueueMap::const_iterator itr = queueMap.find(symbol);
