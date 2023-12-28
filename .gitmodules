@@ -1,0 +1,4 @@
+[submodule "connector"]
+    path = connector
+    url = https://github.com/SemtexProject/semtex-connector.git
+    branch = main
