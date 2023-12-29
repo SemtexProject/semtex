@@ -5,12 +5,15 @@ services:
     build: 
       context: ./exchange
       additional_contexts:
-        grpc: ./grpc
+        grpc: ./semtex-grpc
     depends_on:
       - mysql
     
   api:
-    build: ./api
+    build: 
+      context: ./api
+      additional_contexts:
+        grpc: ./semtex-grpc
     ports:
       - "8000:8000"
     depends_on: 
@@ -18,7 +21,8 @@ services:
     links:
       - mysql
     volumes:
-      - ./api:/usr/src/app
+      - ./api:/usr/src/api
+      - /usr/src/api/grpc
       - ./api/alembic/versions:/usr/src/app/alembic/versions
   redis:
     image: redis:latest
