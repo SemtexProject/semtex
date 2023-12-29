@@ -24,11 +24,6 @@ services:
       - ./api:/usr/src/api
       - /usr/src/api/grpc
       - ./api/alembic/versions:/usr/src/app/alembic/versions
-  redis:
-    image: redis:latest
-    restart: always
-    ports:
-      - "6379:6379"
   mysql:
     image: mysql:5.7
     restart: always
@@ -43,15 +38,3 @@ services:
       - "3306"
     volumes:
       - ./mysql:/var/lib/mysql
-
-  rq-dashboard:
-    image: jaredv/rq-docker:0.0.2 
-    command: rq-dashboard -H redis
-    ports:
-      - 9181:9181
-
-  rq-worker:
-    image: jaredv/rq-docker:0.0.2
-    command: rq worker -u redis://redis:6379 high normal low
-    deploy:
-      replicas: 3
