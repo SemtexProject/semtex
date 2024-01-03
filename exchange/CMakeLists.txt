@@ -3,7 +3,7 @@ project(ExchangeServer)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/bin)
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 option(EXECUTABLE_NAME "Executable name" "ExchangeServer")
 
@@ -20,6 +20,12 @@ find_program(gRPC_CPP_PLUGIN_EXECUTABLE NAMES grpc_cpp_plugin)
 set(PROTO_ROOT_DIR ${CMAKE_SOURCE_DIR}/grpc)
 set(PROTO_SRC_DIR ${PROTO_ROOT_DIR}/protos)
 set(PROTO_GEN_DIR ${PROTO_ROOT_DIR}/generated)
+
+# Ensure that PROTO_ROOT_DIR exists
+if(NOT EXISTS ${PROTO_ROOT_DIR})
+  message(FATAL_ERROR "PROTO_ROOT_DIR (${PROTO_ROOT_DIR}) does not exist")
+endif()
+
 file(GLOB PROTO_FILES "${PROTO_SRC_DIR}/*.proto")
 foreach(PROTO_FILE ${PROTO_FILES})
   get_filename_component(PROTO_FILE_NAME ${PROTO_FILE} NAME_WE)
