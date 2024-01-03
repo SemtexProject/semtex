@@ -4,8 +4,8 @@ from fastapi.responses import JSONResponse
 
 import os
 
-from models import OrderData
-from db.models import Order
+from models import OrderRequest, OrderDto, OrderResponse
+from db.models import Order, User
 from exchange import Exchange
 from db.session import Session
 
@@ -16,8 +16,9 @@ app = FastAPI(debug=DEBUG)
 router = APIRouter(prefix="/api")
 
 @router.post("/submit")
-async def submit_order(order: OrderData):
+async def submit_order(order: OrderRequest):
     orderObj = Order(
+        userId=1,
         symbol=order.symbol,
         price=order.price,
         quantity=order.quantity,
@@ -26,12 +27,28 @@ async def submit_order(order: OrderData):
         status="OPEN"
     )
 
+    user = User(orders=[orderObj])
+
     with Session() as session:
         session.add(orderObj)
-        Exchange.add_order(orderObj.id) # Must be scoped to context manager or session will be closed bedore id can be read
+        session.add(user)
 
-        session.commit()
+        session.flush() # Update orderObj with id
+        session.refresh(orderObj)
 
+        orderDto = OrderDto(
+            id=orderObj.id,
+            symbol=orderObj.symbol,
+            price=orderObj.price,
+            quantity=orderObj.quantity,
+            side=orderObj.side,
+            type=orderObj.type,
+            status=orderObj.status
+        )
+
+        Exchange.add_order(orderDto) # Must be scoped to context manager or session will be closed bedore id can be read
+
+        session.commit() # Save database changes
 
     return JSONResponse(status_code=status.HTTP_201_CREATED, content={"message": "Order submitted successfully"})
 

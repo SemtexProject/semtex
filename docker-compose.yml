@@ -6,6 +6,8 @@ services:
       context: ./exchange
       additional_contexts:
         grpc: ./semtex-grpc
+    ports:
+      - "50051:50051"
     depends_on:
       - mysql
     
@@ -18,12 +20,8 @@ services:
       - "8000:8000"
     depends_on: 
       - mysql
-    links:
-      - mysql
-    volumes:
-      - ./api:/usr/src/api
-      - /usr/src/api/grpc
-      - ./api/alembic/versions:/usr/src/app/alembic/versions
+    environment:
+      - DEBUG=1
   mysql:
     image: mysql:5.7
     restart: always

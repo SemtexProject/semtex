@@ -2,7 +2,7 @@ fastapi # Web framework
 uvicorn[standard] # ASGI server
 sqlalchemy # ORM
 pydantic # Data validation and additional typing support
-redis[hiredis] # Redis
-rq # Redis Message Queue
 pymysql # Connect to MySQL
 alembic # Auto generate migration scripts
+grpcio # gRPC
+grpcio-tools
