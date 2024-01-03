@@ -32,6 +32,8 @@ void runGRPC() {
 
 int main()
 {
+    core::Logger::init();
 	runGRPC();
+    
     return 0;
 }
