@@ -33,6 +33,7 @@ RUN find / -name protoc 2>&1
 COPY . /app
 
 # Copy the proto files into the container at /app
+RUN rm -rf /app/grpc && mkdir -p /app/grpc
 COPY --from=grpc . /app/grpc
 
 # Set the working directory to /app

@@ -10,6 +10,8 @@
 #include "queue/OrderQueue.h"
 #include "order/Types.h"
 
+#include "core/Logger.h"
+
 /*
  * The Exchange is a singleton responsible for submitting orders to the appropriate order queue.
  * 
@@ -37,22 +39,34 @@ public:
   void submit(const order::Order &order) {
     std::cout << "order submitted: " << order << std::endl;
     //add the order to the order queue
-    std::string symbol = order.getSymbol();
+    symbol_t symbol = order.getSymbol();
     OrderQueueMap::const_iterator itr = queueMap.find(symbol);
     if (itr == queueMap.end()) queueMap[symbol] = queue::OrderQueue(symbol);
     queueMap[symbol].enqueue(order);
 
+    while (this->matchOrders(symbol));
+  }
+  
+private:
+  //singleton class member data 
+  Exchange() {}
+  Exchange(Exchange const &) = delete;
+  void operator=(Exchange const &) = delete;
 
+  bool matchOrders(const symbol_t& symbol) {
+    LOG_INFO("Inside matchOrders: {}", symbol);
     //try to execute an order
     auto& queue = queueMap[symbol];
     auto& buyQueue = queue.getQueue(side_t::BUY);
     auto& sellQueue = queue.getQueue(side_t::SELL);
 
     
-    if (buyQueue.empty() || sellQueue.empty()) return;
+    if (buyQueue.empty() || sellQueue.empty()) return false;
 
     //get top two orders
-    const auto& buy = buyQueue.top(), sell = sellQueue.top();
+    const auto buy = buyQueue.top(), sell = sellQueue.top();
+
+    LOG_INFO("Attempting to match orders: \n\t{}\n\t{}", buy.toString(), sell.toString());
 
     //if the highest buy price is >= the lowest sell price
     if (buy.getPrice() >= sell.getPrice()) {
@@ -85,6 +99,7 @@ public:
           buy.getSymbol(),
           buy.getDuration()
         ));
+        return true;
       //conversely, the sell order is only partially filled
       } else if (buy.getQuantity() < sell.getQuantity()) {
         sellQueue.push(order::Order(
@@ -96,17 +111,11 @@ public:
           sell.getSymbol(),
           sell.getDuration()
         ));
+        return true;
       }
     }
-
-
+    return false;
   }
-  
-private:
-  //singleton class member data 
-  Exchange() {}
-  Exchange(Exchange const &) = delete;
-  void operator=(Exchange const &) = delete;
 
   //k = symbol, v = OrderQueue
   OrderQueueMap queueMap;

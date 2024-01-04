@@ -23,7 +23,7 @@ void runGRPC() {
     builder.RegisterService(&service);
 
     std::unique_ptr<grpc::Server> server(builder.BuildAndStart());
-    std::cout << "Server listening on " << server_address << std::endl;
+    LOG_INFO("Server listening on {}", server_address);
 
     server->Wait();
 }
@@ -32,6 +32,8 @@ void runGRPC() {
 
 int main()
 {
+    core::Logger::init();
 	runGRPC();
+    
     return 0;
 }

@@ -16,8 +16,8 @@ namespace transaction
     public:
         Transaction(Order order1, Order order2, quantity_t quantity, price_t price) : order1(order1), order2(order2), quantity(quantity), price(price), timestamp(std::chrono::system_clock::now()) {}
 
-        Order &getOrder1() { return order1; }
-        Order &getOrder2() { return order2; }
+        Order getOrder1() { return order1; }
+        Order getOrder2() { return order2; }
 
         quantity_t getQuantity() { return quantity; }
         price_t getPrice() { return price; }
@@ -38,8 +38,8 @@ namespace transaction
         }
 
     private:
-        Order &order1;
-        Order &order2;
+        Order order1;
+        Order order2;
 
         quantity_t quantity;
         price_t price;
