@@ -1,38 +1,68 @@
+# Simulated Exchange Market Trading and Execution System (SEMTEX)
 
-![mouse](https://github.com/masonhgn/mouse/assets/73012906/7060bd77-d515-4275-8ee9-47db2c6138af)
+## Overview
 
+Welcome to the Simulated Exchange Market Trading and Execution System repository! This project aims to provide a comprehensive and dynamic simulated environment for stock market trading and execution. Users can leverage this system for educational purposes, gaining hands-on experience in simulated trading activities.
 
-# The MOUSE Exchange
-My very own simulated stock exchange!
+## Features
 
-
-## High Level Overview:
-
-There are two main components of this project:
-
-### Client
-- Can place equity orders which route to the server through gRPC
-- Handles a portfolio
-
-### Server
-- Maintains an orderbook, keeping up to date info on all tickers.
-- Matches and executes orders that come from one or more clients.
-
-To manage orders, we must have a...
-#### Central Limit Order Book (CLOB)
-This will be the orderbook maintained by the server, and it will be responsible for handling all orders.
-
-And to actually listen for orders from clients, we use gRPC.
+- Realistic simulation of market conditions.
+- Interactive trading interface offering a web-based client and a low-level gRPC interface for high-frequency trading applications.
+- High throughput and reliability packaged wit a robust and scalable architecture.
+- Support for multiple trading strategies, including market, limit, stop, and stop-limit orders along with a variety of time-in-force options.
 
 
+## Getting Started
 
+The SEMTEX system is packaged as a Docker container, which can be easily deployed on any machine with Docker installed. To get started, follow the steps below.
 
-## In depth Overview:
+### Prerequisites
 
-### Client
-//TODO write client components
+- [Download and install Docker](https://docs.docker.com/get-docker/)
 
-### Server
-- (Order.cpp): Acts as a single order (parent class)
-- (LimitOrder.cpp, MarketOrder.cpp): Children of the Order class, these act as specific orders which the Orderbook will interact with in various ways.
-- (Orderbook.cpp)
+### Installation
+
+1. Clone the repository and navigate to the project directory
+
+```sh
+git clone https://github.com/masonhgn/semtex.git && cd semtex
+```
+
+2. Create a network for the client and server to communicate
+
+```sh
+docker network create exchange-network
+```
+
+3. Build and deploy client and server
+
+```sh
+cd server/exchange && docker build -t exchange-server .
+cd ../client/src && docker build -t exchange-client .
+```
+
+4. Verify that the containers are created (No containers should be in an "Exited" state)
+
+```sh
+docker ps
+```
+
+5. Run the server, then the client
+
+```sh
+docker run -d --name exchange-server --network exchange-network exchange-server
+docker run --name exchange-client --network exchange-network exchange-client
+```
+
+Note: The project may take a few minutes to start up. If the project is not running, try running the command again.
+
+## Documentation
+
+Extensive documentation for the project is in progress and will be available soon. In the meantime, please refer to the source code for more information.
+
+## License
+
+This project is licensed under the [MIT License](link-to-license).
+
+Happy trading!
+

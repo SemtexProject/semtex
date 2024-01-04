@@ -1,0 +1,38 @@
+# Set up server and mysql connection as docker-compose.yml
+
+services:
+  exchange:
+    build: 
+      context: ./exchange
+      additional_contexts:
+        grpc: ./semtex-grpc
+    ports:
+      - "50051:50051"
+    depends_on:
+      - mysql
+    
+  api:
+    build: 
+      context: ./api
+      additional_contexts:
+        grpc: ./semtex-grpc
+    ports:
+      - "8000:8000"
+    depends_on: 
+      - mysql
+    environment:
+      - DEBUG=1
+  mysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
